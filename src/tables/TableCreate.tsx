@@ -9,6 +9,8 @@ import {
   useRedirect,
 } from "react-admin";
 
+import { toast } from "react-toastify";
+
 const columnTypes = [
   { id: "Int", name: "Int" },
   { id: "Float", name: "Float" },
@@ -23,27 +25,37 @@ export const TableCreate = () => {
     <Create
       mutationOptions={{
         onSuccess: () => {
-          setTimeout(() => {
-            redirect("list", "tables");
-          }, 4000);
+          const redirectPromise = new Promise<void>((resolve) => {
+            setTimeout(() => {
+              redirect("list", "tables");
+              resolve();
+            }, 4000);
+          });
+
+          void toast.promise(redirectPromise, {
+            pending: "Creating table...",
+            success: "Table created!",
+            error: "Error: Table not created",
+          });
         },
       }}
     >
       <SimpleForm>
-        {/* must start with string - no number:*/}
         <TextInput
           source="tableName"
           label="Table Name"
           validate={[
             required(),
             (value) =>
+              value && value.includes(" ")
+                ? "Table name cannot contain spaces"
+                : undefined,
+            (value) =>
               value && !/^[a-zA-Z]/.test(value)
                 ? "Table name must start with a letter"
                 : undefined,
           ]}
         />
-
-        {/* Columns Array */}
         <ArrayInput source="columns" label="Columns">
           <SimpleFormIterator>
             <TextInput

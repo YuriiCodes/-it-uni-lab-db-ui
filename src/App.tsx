@@ -11,11 +11,9 @@ import { TableList } from "./tables/TableList.tsx";
 import { TableShow } from "./tables/TableShow.tsx";
 import { TableCreate } from "./tables/TableCreate.tsx";
 
-
 export const App = () => {
   return (
     <Admin layout={Layout} dataProvider={dataProvider}>
-
       <Resource
         name="tables"
         list={TableList}

@@ -1,9 +1,4 @@
-import {
-  ArrayField,
-  Datagrid,
-  List,
-  TextField,
-} from "react-admin";
+import { ArrayField, Datagrid, List, TextField } from "react-admin";
 
 export const TableList = () => (
   <List>
@@ -11,9 +6,7 @@ export const TableList = () => (
       <TextField source="name" />
       <TextField source="id" />
       <ArrayField source="columns">
-        <Datagrid
-        bulkActionButtons={false}
-        >
+        <Datagrid bulkActionButtons={false}>
           <TextField source="cid" />
           <TextField source="name" />
           <TextField source="type" />
