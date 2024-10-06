@@ -17,7 +17,6 @@ export const App = () => {
       <Resource
         name="tables"
         list={TableList}
-        edit={EditGuesser}
         show={TableShow}
         create={TableCreate}
       />
