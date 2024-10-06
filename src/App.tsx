@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Admin,
   Resource,
@@ -12,6 +13,22 @@ import { TableShow } from "./tables/TableShow.tsx";
 import { TableCreate } from "./tables/TableCreate.tsx";
 
 export const App = () => {
+  const [resources, setResources] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      const response = await dataProvider.getList("tables", {
+        pagination: { page: 1, perPage: 100 },
+        sort: { field: "name", order: "ASC" },
+        filter: {},
+      });
+      const tableNames = response.data.map((table) => table.name);
+      setResources(tableNames);
+    };
+
+    void fetchTables();
+  }, []);
+
   return (
     <Admin layout={Layout} dataProvider={dataProvider}>
       <Resource
@@ -20,18 +37,16 @@ export const App = () => {
         show={TableShow}
         create={TableCreate}
       />
-      <Resource
-        name="records/Users"
-        list={ListGuesser}
-        edit={EditGuesser}
-        show={ShowGuesser}
-      />
-      <Resource
-        name="records/Users2"
-        list={ListGuesser}
-        edit={EditGuesser}
-        show={ShowGuesser}
-      />
+
+      {resources.map((tableName) => (
+        <Resource
+          key={tableName}
+          name={`records/${tableName}`}
+          list={ListGuesser}
+          edit={EditGuesser}
+          show={ShowGuesser}
+        />
+      ))}
     </Admin>
   );
 };
